@@ -3,7 +3,7 @@
 This is the implementation codes for [Exploring Visual Context for Weakly Supervised Person Search](https://arxiv.org/abs/2106.10506)
 
 ![demo image](demo/intro.jpg)
-Overall pipeline of the proposed context-guided feature learning framework for weakly supervised person search. (a) We aim to build a framework for person search with only bounding box annotations, (b) where the re-id embeddings are jointly learned with detection. (c) We employ the detection context to pull features belonging to the same identity together, while pushing the re-id features of the pedestrians away from the background features. A hard-negative mining strategy is designed to effectively employ the information in the memory. (d) We use the scene context to generate more accurate clustering results.
+Overall pipeline of the proposed context-guided feature learning framework for weakly supervised person search. We aim to build a framework for person search with only bounding box annotations, where the re-id embeddings are jointly learned with detection. Without identity annotations, initial pseudo labels (colored points) are generated with ImageNet-pretrained weights. We employ the detection context to pull features belonging to the same identity together, while pushing the re-id features of the pedestrians away from the background features. A hard-negative mining strategy is designed to effectively employ the information in the memory. We use the scene context to generate more accurate clustering results.
 
 ## Installation
 
