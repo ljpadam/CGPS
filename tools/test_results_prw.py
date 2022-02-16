@@ -7,7 +7,7 @@ import json
 from PIL import Image
 import pickle
 import re
-from numba import jit
+# from numba import jit
 
 from sklearn.metrics import average_precision_score
 from sklearn.preprocessing import normalize
@@ -122,7 +122,7 @@ def gt_roidbs(root):
 def main(det_thresh=0.05, gallery_size=-1, ignore_cam_id=True):
     results_path = './'
 
-    data_root='/home/jl2/data/person_search/prw/PRW-v16.04.20/'
+    data_root='/home/data/person_search/PRW-v16.04.20/'
     probe_set = load_probes(data_root)
     gallery_set = gt_roidbs(data_root)
 
@@ -239,6 +239,9 @@ def search_performance_calc(gallery_set, probe_set,
             # get L2-normalized feature matrix NxD
             assert feat_g.size == np.prod(feat_g.shape[:2])
             feat_g = feat_g.reshape(feat_g.shape[:2])
+
+            scores = det[:, 4]
+            feat_g = scores[:, np.newaxis] * feat_g
             # compute cosine similarities
             sim = feat_g.dot(feat_p).ravel()
             # assign label for each det

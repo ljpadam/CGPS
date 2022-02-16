@@ -41,6 +41,8 @@ class CGPSHead(nn.Module):
                  no_bg=False,
                  no_bg_triplet=False,
                  top_percent=0.1,
+                 temperature=0.05,
+                 momentum=0.2,
                  use_quaduplet_loss=True,
                  triplet_weight=1,
                  triplet_bg_weight=0.25):
@@ -60,7 +62,7 @@ class CGPSHead(nn.Module):
         self.bbox_coder = build_bbox_coder(bbox_coder)
         self.loss_cls = build_loss(loss_cls)
         self.loss_bbox = build_loss(loss_bbox)
-        self.loss_reid = HybridMemoryMultiFocalPercent(256, id_num, top_percent=top_percent)
+        self.loss_reid = HybridMemoryMultiFocalPercent(256, id_num, temp=temperature, momentum=momentum, top_percent=top_percent)
         self.loss_triplet = Quaduplet2Loss(bg_weight=triplet_bg_weight)
         self.use_quaduplet_loss = use_quaduplet_loss
         self.reid_loss_weight = loss_reid['loss_weight']
@@ -84,7 +86,10 @@ class CGPSHead(nn.Module):
                 nn.BatchNorm1d(out_dim_reg)
                 )
             self.fc_reg = nn.Linear(in_channels, out_dim_reg)
-        self.id_feature = nn.Linear(in_channels, 256)
+        self.id_feature = nn.Linear(in_channels, 128)
+        self.id_feature1 = nn.Linear(in_channels // 2, 128)
+        #self.bn1 = nn.BatchNorm1d(128)
+        #self.bn2 = nn.BatchNorm1d(128)
         #for reid loss
         self.debug_imgs = None
         #set all proposal score to 1, for enquery inference
@@ -100,16 +105,24 @@ class CGPSHead(nn.Module):
             nn.init.constant_(self.fc_reg.bias, 0)
         nn.init.normal_(self.id_feature.weight, 0, 0.001)
         nn.init.constant_(self.id_feature.bias, 0)
+        nn.init.normal_(self.id_feature1.weight, 0, 0.001)
+        nn.init.constant_(self.id_feature1.bias, 0)
+        #nn.init.normal_(self.bn1.weight, 0, 0.01)
+        #nn.init.constant_(self.bn1.bias, 0)
+        #nn.init.normal_(self.bn2.weight, 0, 0.01)
+        #nn.init.constant_(self.bn2.bias, 0)
 
 
     @auto_fp16()
-    def forward(self, x):
-        if self.with_avg_pool:
-            x = self.avg_pool(x)
+    def forward(self, x1, x):
+        # if self.with_avg_pool:
+        #     x = self.avg_pool(x)
         x = x.view(x.size(0), -1)
+        x1 = x1.view(x1.size(0), -1)
         cls_score = self.fc_cls(x) if self.with_cls else None
         bbox_pred = self.fc_reg(x) if self.with_reg else None
-        id_pred = F.normalize(self.id_feature(x))
+        id_pred = F.normalize(torch.cat((self.id_feature(x), self.id_feature1(x1)), axis=1))
+        #id_pred = F.normalize(torch.cat((self.bn1(self.id_feature(x)), self.bn2(self.id_feature1(x1))), axis=1))
         return cls_score, bbox_pred, id_pred
 
     def _get_target_single(self, pos_bboxes, neg_bboxes, pos_gt_bboxes,

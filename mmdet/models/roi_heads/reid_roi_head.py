@@ -4,6 +4,7 @@ from mmdet.core import bbox2result, bbox2roi, build_assigner, build_sampler
 from ..builder import HEADS, build_head, build_roi_extractor
 from .base_roi_head import BaseRoIHead
 from .test_mixins import BBoxTestMixin, MaskTestMixin
+import torch.nn.functional as F
 
 
 @HEADS.register_module()
@@ -137,9 +138,13 @@ class ReidRoIHead(BaseRoIHead, BBoxTestMixin, MaskTestMixin):
         # TODO: a more flexible way to decide which feature maps to use
         bbox_feats = self.bbox_roi_extractor(
             x[:self.bbox_roi_extractor.num_inputs], rois)
+        bbox_feats1 = F.adaptive_max_pool2d(bbox_feats, 1)
         if self.with_shared_head:
             bbox_feats = self.shared_head(bbox_feats)
-        cls_score, bbox_pred, id_pred = self.bbox_head(bbox_feats)
+            bbox_feats = F.adaptive_max_pool2d(bbox_feats, 1)
+        # print(bbox_feats.shape, bbox_feats1.shape, '#'*10)
+        cls_score, bbox_pred, id_pred = self.bbox_head(bbox_feats1, bbox_feats)
+        # print(cls_score.shape, bbox_pred.shape, id_pred.shape, '#'*10)
 
         bbox_results = dict(
             cls_score=cls_score, bbox_pred=bbox_pred, bbox_feats=bbox_feats, id_pred=id_pred)
@@ -259,6 +264,7 @@ class ReidRoIHead(BaseRoIHead, BBoxTestMixin, MaskTestMixin):
         id_pred = bbox_results['id_pred']
         num_proposals_per_img = tuple(len(p) for p in proposals)
         rois = rois.split(num_proposals_per_img, 0)
+        # print(cls_score.shape, num_proposals_per_img)
         cls_score = cls_score.split(num_proposals_per_img, 0)
         # some detector with_reg is False, bbox_pred will be None
         bbox_pred = bbox_pred.split(

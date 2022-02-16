@@ -8,5 +8,5 @@ from .cgps_head import CGPSHead
 __all__ = [
     'BBoxHead', 'ConvFCBBoxHead', 'Shared2FCBBoxHead',
     'Shared4Conv1FCBBoxHead', 'DoubleConvFCBBoxHead', 'SABLHead',
-    'CGPSHead',
+    'CGPSHead'
 ]

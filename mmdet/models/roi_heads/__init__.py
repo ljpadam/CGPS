@@ -23,5 +23,5 @@ __all__ = [
     'Shared4Conv1FCBBoxHead', 'DoubleConvFCBBoxHead', 'FCNMaskHead',
     'HTCMaskHead', 'FusedSemanticHead', 'GridHead', 'MaskIoUHead',
     'SingleRoIExtractor', 'PISARoIHead', 'PointRendRoIHead', 'MaskPointHead',
-    'CoarseMaskHead', 'DynamicRoIHead', 'ReidRoIHead', 
+    'CoarseMaskHead', 'DynamicRoIHead', 'ReidRoIHead'
 ]

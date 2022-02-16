@@ -75,7 +75,8 @@ def evaluate_detections(dataset, gallery_det, threshold=0.5, iou_thresh=0.5, lab
         print("  AP = {:.2%}".format(ap))
 
 
-def evaluate_search(
+
+def evaluate_search_nae(
     dataset, gallery_det, gallery_feat, probe_feat, threshold=0.5, gallery_size=100
 ):
     """
@@ -132,9 +133,13 @@ def evaluate_search(
             if gallery_imname not in name_to_det_feat:
                 continue
             det, feat_g = name_to_det_feat[gallery_imname]
+            score = det[:, 4]
+
             # get L2-normalized feature matrix NxD
             assert feat_g.size == np.prod(feat_g.shape[:2])
             feat_g = feat_g.reshape(feat_g.shape[:2])
+
+            feat_g = score[:, np.newaxis] * feat_g
             # compute cosine similarities
             sim = feat_g.dot(feat_p).ravel()
             # assign label for each det
@@ -212,3 +217,4 @@ def evaluate_search(
     accs = np.mean(accs, axis=0)
     for i, k in enumerate(topk):
         print("  Top-{:2d} = {:.2%}".format(k, accs[i]))
+

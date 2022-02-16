@@ -19,7 +19,7 @@ from mmdet.datasets import (build_dataloader, build_dataset,
 from mmdet.models import build_detector
 from mmdet.core import encode_mask_results, tensor2imgs
 
-from tools.person_search.evaluate import evaluate_detections, evaluate_search
+from tools.person_search.evaluate import evaluate_detections, evaluate_search_nae
 from tools.person_search.psdb import PSDB
 
 def single_gpu_test(model,
@@ -336,7 +336,7 @@ def main():
     dataset = PSDB("psdb_test", cfg.data_root)
     evaluate_detections(dataset, gboxes, threshold=args.reid_threshold)
     evaluate_detections(dataset, gboxes, threshold=args.reid_threshold, labeled_only=True)
-    evaluate_search(dataset, gboxes, gfeatures, pfeatures, threshold=args.reid_threshold, gallery_size=100)
+    evaluate_search_nae(dataset, gboxes, gfeatures, pfeatures, threshold=args.reid_threshold, gallery_size=100)
 
 
 if __name__ == '__main__':
