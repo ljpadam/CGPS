@@ -51,8 +51,8 @@ Download trained PRW [checkpoint](https://drive.google.com/file/d/10MftT96ldoZU9
 
 |Dataset|Model|mAP|Rank1| Config | Link |
 |-----|-----|------|-----|------|-----|
-|CUHK-SYSU|CGPS| 73.9%|76.0%|[cfg](configs/cgps/cuhk.py)| [model](https://drive.google.com/file/d/1wvGUTOvncs-tjKCfSRnZLJiZt6AZ4461/view?usp=sharing)| 
-|PRW|CGPS|12.5%|58.1%|[cfg](configs/cgps/prw.py)| [model](https://drive.google.com/file/d/10MftT96ldoZU9mlTu1WYthxprRs0zd1j/view?usp=sharing)| 
+|CUHK-SYSU|CGPS| 80.1%|82.1%|[cfg](configs/cgps/cuhk.py)| [model](https://drive.google.com/file/d/1G7S1JtlvjtBe477zuCkcEYBIICVTqufI/view?usp=sharing)| 
+|PRW|CGPS|16.6%|68.2%|[cfg](configs/cgps/prw.py)| [model](https://drive.google.com/file/d/1ss3GOEbSPMnv68zWWgB5PW5zcA9GEjpZ/view?usp=sharing)| 
 
 ## Reference Codes
 Thanks for the great projects of [MMdetection](https://github.com/open-mmlab/mmdetection), [OpenUnReID](https://github.com/open-mmlab/OpenUnReID) and [AlignPS](https://github.com/daodaofr/AlignPS).
