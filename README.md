@@ -29,7 +29,7 @@ For PRW, change the path of your dataset and the annotaion file in the [config f
    sh train.sh
    ```
   2. Test CUHK-SYSU
-Download trained CUHK [checkpoint](https://drive.google.com/file/d/1wvGUTOvncs-tjKCfSRnZLJiZt6AZ4461/view?usp=sharing).
+Download trained CUHK [checkpoint](https://drive.google.com/file/d/1G7S1JtlvjtBe477zuCkcEYBIICVTqufI/view?usp=sharing).
    ```bash
    cd jobs/cuhk/
    sh test.sh
@@ -40,7 +40,7 @@ Download trained CUHK [checkpoint](https://drive.google.com/file/d/1wvGUTOvncs-t
    sh train.sh
    ```
    4. Test PRW
-Download trained PRW [checkpoint](https://drive.google.com/file/d/10MftT96ldoZU9mlTu1WYthxprRs0zd1j/view?usp=sharing).
+Download trained PRW [checkpoint](https://drive.google.com/file/d/1ss3GOEbSPMnv68zWWgB5PW5zcA9GEjpZ/view?usp=sharing).
    Change the paths in L125 in [test_results_prw.py](tools/test_results_prw.py)
    ```bash
    cd jobs/prw
